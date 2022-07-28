@@ -3,8 +3,10 @@ use std::time::Instant;
 const GRID_SIZE: u8 = 9;
 const GRID_BLOCK: u8 = 3;
 
+type Board = [[u8; 9]; 9];
+
 fn main() {
-    let mut board: [[u8; 9]; 9] = [
+    let mut board: Board = [
         [7, 0, 2, 0, 5, 0, 6, 0, 0],
         [0, 0, 0, 0, 0, 3, 0, 0, 0],
         [1, 0, 0, 0, 0, 9, 5, 0, 0],
@@ -31,7 +33,7 @@ fn main() {
     println!("\nTime taken: {}ms", time.elapsed().as_millis());
 }
 
-fn is_number_in_row(board: &mut [[u8; 9]; 9], number: u8, row: u8) -> bool {
+fn is_number_in_row(board: &mut Board, number: u8, row: u8) -> bool {
     for i in 0..GRID_SIZE {
         if board[row as usize][i as usize] == number {
             return true;
@@ -40,7 +42,7 @@ fn is_number_in_row(board: &mut [[u8; 9]; 9], number: u8, row: u8) -> bool {
     false
 }
 
-fn is_number_in_column(board: &mut [[u8; 9]; 9], number: u8, column: u8) -> bool {
+fn is_number_in_column(board: &mut Board, number: u8, column: u8) -> bool {
     for i in 0..GRID_SIZE {
         if board[i as usize][column as usize] == number {
             return true;
@@ -49,7 +51,7 @@ fn is_number_in_column(board: &mut [[u8; 9]; 9], number: u8, column: u8) -> bool
     false
 }
 
-fn is_number_in_box(board: &mut [[u8; 9]; 9], number: u8, box_row: u8, box_column: u8) -> bool {
+fn is_number_in_box(board: &mut Board, number: u8, box_row: u8, box_column: u8) -> bool {
     for i in 0..GRID_BLOCK {
         for j in 0..GRID_BLOCK {
             if board[(box_row + i) as usize][(box_column + j) as usize] == number {
@@ -60,7 +62,7 @@ fn is_number_in_box(board: &mut [[u8; 9]; 9], number: u8, box_row: u8, box_colum
     false
 }
 
-fn is_valid_place(board: &mut [[u8; 9]; 9], number: u8, row: u8, column: u8) -> bool {
+fn is_valid_place(board: &mut Board, number: u8, row: u8, column: u8) -> bool {
     !is_number_in_row(board, number, row)
         && !is_number_in_column(board, number, column)
         && !is_number_in_box(
@@ -71,7 +73,7 @@ fn is_valid_place(board: &mut [[u8; 9]; 9], number: u8, row: u8, column: u8) -> 
         )
 }
 
-fn solve_board(board: &mut [[u8; 9]; 9]) -> bool {
+fn solve_board(board: &mut Board) -> bool {
     for i in 0..GRID_SIZE {
         for j in 0..GRID_SIZE {
             if board[i as usize][j as usize] == 0 {
@@ -91,7 +93,7 @@ fn solve_board(board: &mut [[u8; 9]; 9]) -> bool {
     true
 }
 
-fn print_board(board: &[[u8; 9]; 9]) {
+fn print_board(board: &Board) {
     for i in 0..GRID_SIZE {
         if i % GRID_BLOCK == 0 && i != 0 {
             println!("-----------------------");
