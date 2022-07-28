@@ -1,9 +1,7 @@
 use std::time::Instant;
 
-enum BoardSpecs {
-    GridSize = 9,
-    GridBlock = 3,
-}
+const GRID_SIZE: u8 = 9;
+const GRID_BLOCK: u8 = 3;
 
 fn main() {
     let mut board: [[u8; 9]; 9] = [
@@ -34,7 +32,7 @@ fn main() {
 }
 
 fn is_number_in_row(board: &mut [[u8; 9]; 9], number: u8, row: u8) -> bool {
-    for i in 0..BoardSpecs::GridSize as u8 {
+    for i in 0..GRID_SIZE {
         if board[row as usize][i as usize] == number {
             return true;
         }
@@ -43,7 +41,7 @@ fn is_number_in_row(board: &mut [[u8; 9]; 9], number: u8, row: u8) -> bool {
 }
 
 fn is_number_in_column(board: &mut [[u8; 9]; 9], number: u8, column: u8) -> bool {
-    for i in 0..BoardSpecs::GridSize as u8 {
+    for i in 0..GRID_SIZE {
         if board[i as usize][column as usize] == number {
             return true;
         }
@@ -52,8 +50,8 @@ fn is_number_in_column(board: &mut [[u8; 9]; 9], number: u8, column: u8) -> bool
 }
 
 fn is_number_in_box(board: &mut [[u8; 9]; 9], number: u8, box_row: u8, box_column: u8) -> bool {
-    for i in 0..BoardSpecs::GridBlock as u8 {
-        for j in 0..BoardSpecs::GridBlock as u8 {
+    for i in 0..GRID_BLOCK {
+        for j in 0..GRID_BLOCK {
             if board[(box_row + i) as usize][(box_column + j) as usize] == number {
                 return true;
             }
@@ -65,14 +63,19 @@ fn is_number_in_box(board: &mut [[u8; 9]; 9], number: u8, box_row: u8, box_colum
 fn is_valid_place(board: &mut [[u8; 9]; 9], number: u8, row: u8, column: u8) -> bool {
     !is_number_in_row(board, number, row)
         && !is_number_in_column(board, number, column)
-        && !is_number_in_box(board, number, row - row % BoardSpecs::GridBlock as u8, column - column % BoardSpecs::GridBlock as u8)
+        && !is_number_in_box(
+            board,
+            number,
+            row - row % GRID_BLOCK,
+            column - column % GRID_BLOCK,
+        )
 }
 
 fn solve_board(board: &mut [[u8; 9]; 9]) -> bool {
-    for i in 0..BoardSpecs::GridSize as u8 {
-        for j in 0..BoardSpecs::GridSize as u8 {
+    for i in 0..GRID_SIZE {
+        for j in 0..GRID_SIZE {
             if board[i as usize][j as usize] == 0 {
-                for k in 1..=BoardSpecs::GridSize as u8 {
+                for k in 1..=GRID_SIZE {
                     if is_valid_place(board, k, i, j) {
                         board[i as usize][j as usize] = k;
                         if solve_board(board) {
@@ -89,12 +92,12 @@ fn solve_board(board: &mut [[u8; 9]; 9]) -> bool {
 }
 
 fn print_board(board: &[[u8; 9]; 9]) {
-    for i in 0..BoardSpecs::GridSize as u8 {
-        if i % BoardSpecs::GridBlock as u8 == 0 && i != 0 {
+    for i in 0..GRID_SIZE {
+        if i % GRID_BLOCK == 0 && i != 0 {
             println!("-----------------------");
         }
-        for j in 0..BoardSpecs::GridSize as u8 {
-            if j % BoardSpecs::GridBlock as u8 == 0 && j != 0 {
+        for j in 0..GRID_SIZE {
+            if j % GRID_BLOCK == 0 && j != 0 {
                 print!(" | ");
             }
             print!("{} ", board[i as usize][j as usize]);
